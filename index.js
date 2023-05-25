@@ -1,27 +1,16 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const posts = require('./model/posts');
+const path = require("path");
+const apiRoutes = require('./routes/api');
 
 const app = express();
 const PORT = 5000;
 
+app.use("/api", apiRoutes);
+app.use("/", express.static(path.join(__dirname, "public")));
 
 
-app.get("/all", (req,res)=>{
-    res.json(JSON.stringify(posts.getAll()));
-});
 
-
-app.post("/new", bodyParser.json(),(req,res)=>{
-    let tittle = req.body.tittle;
-    let description = req.body.description;
-    
-    posts.newPost(tittle, description);
-
-    res.send("Post adicionado");
-});
-
-app.listen(5000, ()=>{
+app.listen(PORT, ()=>{
     console.log(`Server running on Port: ${PORT}`);
 });
 
