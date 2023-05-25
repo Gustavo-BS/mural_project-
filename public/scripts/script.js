@@ -1,24 +1,24 @@
 
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     updatePosts();
 })
 
-function updatePosts(){
+function updatePosts() {
     fetch("http://localhost:5000/api/all").then(res => {
         return res.json()
-    }).then(json=>{
+    }).then(json => {
         console.log(json);
 
         let postElements = '';
         let posts = JSON.parse(json);
-        posts.forEach((post)=>{
+        posts.forEach((post) => {
             let postElement = `
             <div id=${post.id} class="card mb-5">
-                <div class="card-header ">
+                <div class="card-header bg-dark bg-gradient text-white">
                     <h5 class="card-title ">${post.title}</h5>
                 </div>
                 <div class="card-body">
-                    <div class="card-text">${post.description}</div>
+                    <div class="card-text ">${post.description}</div>
                 </div>
             </div>
 
@@ -30,22 +30,34 @@ function updatePosts(){
     })
 }
 
-function newPost(){
+function newPost() {
     let title = document.getElementById("title").value;
     let description = document.getElementById("description").value;
 
-    let post = {title, description};
+    let post = { title, description };
+    if (!(title === "" || description === "")) {
+        const options = {
+            method: "POST",
+            headers: new Headers({ 'content-type': 'application/json' }),
+            body: JSON.stringify(post)
+        }
 
-
-    const options = {method: "POST",
-                    headers: new Headers({'content-type': 'application/json'}),
-                    body: JSON.stringify(post)
+        fetch("http://localhost:5000/api/new", options).then(res => {
+            console.log(res);
+            updatePosts();
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+        })
+    }else{
+        if(title === "" && description === ""){
+            alert("Title and description cannot be empty");
+            
+        }else if(description === ""){
+            alert("Description cannot be empty");
+        }else{
+            alert("Title cannot be empty");
+        }
     }
 
-    fetch("http://localhost:5000/api/new", options).then(res => {
-        console.log(res);
-        updatePosts();
-        document.getElementById("title").value = "";
-        document.getElementById("description").value = "";
-    })
+
 }
