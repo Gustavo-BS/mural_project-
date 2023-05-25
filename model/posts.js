@@ -1,10 +1,6 @@
 module.exports = {
     posts : [
-        {
-            id: "123",
-            tittle: "Teste mural",
-            description: "Descricao Teste"
-        },
+        
     ],
 
 
@@ -12,8 +8,8 @@ module.exports = {
         return this.posts;
     },
 
-    newPost(tittle, description){
-        this.posts.push({id: generateID(), tittle, description});
+    newPost(title, description){
+        this.posts.push({id: generateID(), title, description});
     }
 
     
